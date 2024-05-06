@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, height=device-height, target-densitydpi=device-dpi, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+    .arrows {
+      font-size:35px;
+      color:AliceBlue;
+    }
+    .circularArrows {
+      font-size:35px;
+      color:Cornsilk;
+    }
+    td {
+      width: 100px;
+      height: 60px;
+      font-size: 16px;
+      background-color:#F93ED7;
+      border-radius:25%;
+      box-shadow: 5px 5px #888888;
+    }
+    td:active {
+      transform: translate(5px,5px);
+      box-shadow: none; 
+    }
+
+    .noselect {
+      touch-action: manipulation; /* disable docule tap to zoom */
+      -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+         -khtml-user-select: none; /* Konqueror HTML */
+           -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome and Opera */                                  
+    }
+    </style>
+  </head>
+
+  <body class="noselect" align="center" style="background-color:white">
+    <h3 style="color: teal;text-align:center;">&#129470;Robot Arm Web Controller</h3>  
+    <table id="mainTable" style="width:500;margin:auto;table-layout:fixed" CELLSPACING=8>
+      <tr>
+        <td ontouchstart='toggleCheckbox("TURN_RIGHT_RM")' ontouchend='toggleCheckbox("IN1_OFF")'>TR_RBA</span></td>
+        <td ontouchstart='toggleCheckbox("EXTEND")' ontouchend='toggleCheckbox("IN3_OFF")'>EXTEND</span></td>
+        <td ontouchstart='toggleCheckbox("UPPER")' ontouchend='toggleCheckbox("IN5_OFF")'>UPPER</span></td>
+      </tr>
+      
+      <tr>
+        <td ontouchstart='toggleCheckbox("TURN_LEFT_RM")' ontouchend='toggleCheckbox("IN2_OFF")'>TL_RBA</span></td>
+        <td ontouchstart='toggleCheckbox("RESTACK")' ontouchend='toggleCheckbox("IN4_OFF")'>RESTACK</span></td>  
+        <td ontouchstart='toggleCheckbox("LOWER")' ontouchend='toggleCheckbox("IN6_OFF")'>LOWER</span></td>   
+      </tr>
+      
+      <tr>
+        <td ontouchstart='toggleCheckbox("UPPER_G")' ontouchend='toggleCheckbox("IN9_OFF")'>UPPER_G</span></td>
+        <td ontouchstart='toggleCheckbox("ROTATE_RM_L")' ontouchend='toggleCheckbox("IN7_OFF")'>RT_L</span></td>
+        <td ontouchstart='toggleCheckbox("GRIP")' ontouchend='toggleCheckbox("IN11_OFF")'>GRIP</span></td>
+      </tr>
+      
+      <tr>
+        <td ontouchstart='toggleCheckbox("LOWER_G")' ontouchend='toggleCheckbox("IN10_OFF")'>LOWER_G</span></td>
+        <td ontouchstart='toggleCheckbox("ROTATE_RM_R")' ontouchend='toggleCheckbox("IN8_OFF")'>RT_R</span></td>
+        <td ontouchstart='toggleCheckbox("UN_GRIP")' ontouchend='toggleCheckbox("IN12_OFF")'>UN_GRIP</span></td>
+      </tr>
+      
+      <tr>
+      <td ontouchstart='onTouchStartAndEnd("11")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8678;</span></td>
+      <td style="background-color:#95F5E7;box-shadow:none"><h4 style="color: DarkMagenta;text-align:center;" ontouchstart='toggleCheckbox("home")' ontouchend='toggleCheckbox("H_OFF")'>&#129470; HOME </h4></td>
+      <td ontouchstart='onTouchStartAndEnd("12")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8680;</span></td>
+      </tr>
+
+      <tr>
+      <td ontouchstart='onTouchStartAndEnd("5")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#11017;</span></td>
+      <td ontouchstart='onTouchStartAndEnd("1")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8679;</span></td>
+      <td ontouchstart='onTouchStartAndEnd("6")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#11016;</span></td>
+      </tr>
+      
+      <tr>
+        <td ontouchstart='onTouchStartAndEnd("9")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8634;</span></td>
+        <td style="background-color:white;box-shadow:none">AGV Control &#128663;</td>
+        <td ontouchstart='onTouchStartAndEnd("10")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8635;</span></td>
+      </tr>
+           
+      <tr>
+      <td ontouchstart='onTouchStartAndEnd("7")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#11019;</span></td>
+      <td ontouchstart='onTouchStartAndEnd("2")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#8681;</span></td>
+      <td ontouchstart='onTouchStartAndEnd("8")' ontouchend='onTouchStartAndEnd("0")'><span class="arrows" >&#11018;</span></td>
+      </tr>    
+    </table>
+    
+   <script>
+    // ... (your existing JavaScript code)
+      var webSocketUrl = "ws:\/\/" + window.location.hostname + "/ws";
+      var websocket;
+      
+      function initWebSocket() 
+      {
+        websocket = new WebSocket(webSocketUrl);
+        websocket.onopen    = function(event){};
+        websocket.onclose   = function(event){setTimeout(initWebSocket, 2000);};
+        websocket.onmessage = function(event){};
+      }
+
+      function onTouchStartAndEnd(value) 
+      {
+        websocket.send(value);
+      }
+  
+     function toggleCheckbox(x) {
+     var xhr = new XMLHttpRequest();
+     xhr.open("GET", "/" + x, true);
+     xhr.send();
+    }
+    
+    window.onload = initWebSocket;
+      document.getElementById("mainTable").addEventListener("touchend", function(event){
+        event.preventDefault()
+      });
+
+    </script>
+  </body>
+</html>
